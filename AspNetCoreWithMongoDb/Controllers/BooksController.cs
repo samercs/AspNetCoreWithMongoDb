@@ -62,7 +62,7 @@ namespace AspNetCoreWithMongoDb.Controllers
             {
                 return NotFound();
             }
-            book.BookName = model.Book.BookName;
+            book.Name = model.Book.Name;
             book.Author = model.Book.Author;
             book.Category = model.Book.Category;
             book.Price = model.Book.Price;

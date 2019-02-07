@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNetCoreWithMongoDb.Data;
+using AspNetCoreWithMongoDb.Extentions;
 using AspNetCoreWithMongoDb.Models;
+using AspNetCoreWithMongoDb.Models.Entity;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
@@ -19,7 +22,8 @@ namespace AspNetCoreWithMongoDb.Services
 
         public List<Book> Get()
         {
-            return (List<Book>)  _context.Books.Find(i => true).ToList();
+            var books = (List<Book>)  _context.Books.AsQueryable().ToList();
+            return books.Include<Book, Category>(_context).Include<Book,Author>(_context);
         }
 
         public Book Get(string id)
@@ -46,6 +50,23 @@ namespace AspNetCoreWithMongoDb.Services
         public void Remove(string id)
         {
             _context.Books.DeleteOne(book => book.Id == id);
+        }
+
+        private List<Book> IncludeCategory(List<Book> books)
+        {
+            foreach (var book in books)
+            {
+                book.Category = _context.Categories.Find(i => i.Id.Equals(book.CategoryId)).FirstOrDefault();
+            }
+            return books;
+        }
+        private List<Book> IncludeAuthor(List<Book> books)
+        {
+            foreach (var book in books)
+            {
+                book.Author = _context.Authors.Find(i => i.Id.Equals(book.AuthorId)).FirstOrDefault();
+            }
+            return books;
         }
     }
 }
