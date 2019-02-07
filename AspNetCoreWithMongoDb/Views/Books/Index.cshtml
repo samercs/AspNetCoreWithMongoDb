@@ -1,0 +1,57 @@
+﻿@model System.Collections.Generic.List<AspNetCoreWithMongoDb.Models.Book>
+
+@{
+    ViewBag.Title = "Books";
+    Layout = "_Layout";
+}
+
+<h2>Books</h2>
+<table class="table table-bordered table-hover table-dark">
+    <tr>
+        <th>
+            Id
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Auther
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    @foreach (var book in Model)
+    {
+        <tr>
+            <td>
+                @book.Id
+            </td>
+            <td>
+                @book.BookName
+            </td>
+            <td>
+                @book.Author
+            </td>
+            <td>
+                @book.Category
+            </td>
+            <td>
+                @book.Price
+            </td>
+            <td>
+                <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@book.Id">Remove</a>
+            </td>
+        </tr>
+    }
+</table>
+<div>
+    <a asp-action="Add" class="btn btn-block btn-primary">Add New Book</a>
+</div>
